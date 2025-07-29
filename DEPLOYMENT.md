@@ -12,6 +12,8 @@ Render is a modern cloud platform that makes deployment simple and offers a gene
 
 ### Step-by-Step Deployment
 
+#### **Method 1: Docker Deployment (Most Reliable)**
+
 1. **Push to GitHub**
    ```bash
    git add .
@@ -26,11 +28,27 @@ Render is a modern cloud platform that makes deployment simple and offers a gene
    - Select your `excel-to-asc-converter` repository
 
 3. **Configure Service**
-   - **Name**: `excel-to-asc-converter` (or your preferred name)
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT app:app`
-   - **Plan**: Free (or paid for better performance)
+   - **Name**: `excel-to-asc-converter`
+   - **Environment**: `Docker`
+   - **Dockerfile Path**: `./Dockerfile`
+   - **Plan**: Free
+
+#### **Method 2: Python Environment (Alternative)**
+
+If Docker doesn't work, try the Python environment:
+
+- **Name**: `excel-to-asc-converter`
+- **Environment**: `Python 3`
+- **Build Command**: `pip install --upgrade pip setuptools wheel && pip install --only-binary=all -r requirements.txt`
+- **Start Command**: `gunicorn --bind 0.0.0.0:$PORT --timeout 300 --workers 1 app:app`
+- **Plan**: Free
+
+#### **Method 3: Minimal Setup (Last Resort)**
+
+If both above fail, use minimal requirements:
+
+- Use `requirements-minimal.txt` instead of `requirements.txt`
+- **Build Command**: `pip install -r requirements-minimal.txt`
 
 4. **Environment Variables** (Optional)
    - `SECRET_KEY`: Generate a secure random string
