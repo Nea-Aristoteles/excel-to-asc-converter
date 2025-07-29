@@ -46,6 +46,19 @@ Una moderna applicazione web per convertire file Excel in formato ASC per sistem
    
    Vai su: **http://localhost:8080**
 
+## 🌐 Deploy to Production
+
+### Quick Deploy to Render (Free)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+1. Fork this repository
+2. Create account on [Render.com](https://render.com)
+3. Connect your GitHub repository
+4. Deploy automatically!
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## 📋 Come Utilizzare
 
 1. **📁 Seleziona File**: Clicca su "Seleziona File Excel" e scegli il tuo file .xlsx o .xls
