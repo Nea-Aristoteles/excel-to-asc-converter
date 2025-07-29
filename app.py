@@ -6,7 +6,6 @@ import os
 import tempfile
 import zipfile
 from werkzeug.utils import secure_filename
-from excel_to_asc import process_excel_to_asc
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
@@ -19,14 +18,13 @@ def allowed_file(filename):
 
 def process_excel_to_asc(filepath):
     """Process Excel file and return ASC content"""
+    from excel_to_asc import format_avere_line, format_dare_line
+    
     df = pd.read_excel(filepath)
     
     # Separate records based on amount
     dare_records = df[df['Importo'] >= 0].copy()
     avere_records = df[df['Importo'] < 0].copy()
-    
-    # Import formatting functions from excel_to_asc
-    from excel_to_asc import format_avere_line, format_dare_line
     
     results = {
         'total_records': len(df),
