@@ -34,7 +34,11 @@ Una moderna applicazione web per convertire file Excel in formato ASC per sistem
 
 2. **Installa le dipendenze**
    ```bash
-   pip3 install --user --break-system-packages -r requirements.txt
+   # Opzione A: Script automatico (raccomandato)
+   ./deploy.sh
+   
+   # Opzione B: Installazione manuale
+   pip3 install --user --break-system-packages --only-binary=all -r requirements.txt
    ```
 
 3. **Avvia l'applicazione**
@@ -144,8 +148,28 @@ python3 app.py
 <summary><strong>❌ Errore "Module not found"</strong></summary>
 
 ```bash
-pip3 install --user --break-system-packages pandas openpyxl flask werkzeug
+pip3 install --user --break-system-packages --only-binary=all pandas openpyxl flask werkzeug
 ```
+</details>
+
+<details>
+<summary><strong>🔧 Pandas Build/Compilation Errors</strong></summary>
+
+Se incontri errori di compilazione pandas (C++ errors):
+
+```bash
+# Soluzione 1: Usa solo binary wheels
+pip3 install --only-binary=all pandas==2.0.3
+
+# Soluzione 2: Usa requirements leggeri
+pip3 install --only-binary=all -r requirements-light.txt
+
+# Soluzione 3: Usa script di deployment
+./deploy.sh
+```
+
+**Causa**: Pandas richiede compilazione C++ che può fallire su alcuni sistemi.
+**Soluzione**: Usa sempre binary wheels pre-compilati.
 </details>
 
 <details>

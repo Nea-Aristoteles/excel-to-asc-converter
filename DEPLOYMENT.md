@@ -90,9 +90,11 @@ Render automatically redeploys when you push to your main branch on GitHub.
 ### Common Issues
 
 **Build Fails**
-- Check Python version in `runtime.txt`
+- Check Python version in `runtime.txt` (use Python 3.10.12 for best compatibility)
 - Verify all dependencies in `requirements.txt`
+- For pandas build issues, try `requirements-light.txt` instead
 - Check build logs in Render dashboard
+- If pandas compilation fails, use pre-compiled wheels only
 
 **App Won't Start**
 - Verify `Procfile` and start command
@@ -107,6 +109,19 @@ Render automatically redeploys when you push to your main branch on GitHub.
 **Port Issues**
 - Use `PORT` environment variable (handled automatically)
 - Don't hardcode ports in production
+
+**Pandas Build Issues (C++ Compilation Errors)**
+If you encounter pandas compilation errors during deployment:
+
+1. **Use Python 3.10**: Update `runtime.txt` to `python-3.10.12`
+2. **Try lighter requirements**: Use `requirements-light.txt` instead
+3. **Force binary wheels**: Add `--only-binary=all` to build command
+4. **Alternative**: Use pandas 2.1.4 instead of 2.2.0
+
+Quick fix for Render:
+```yaml
+buildCommand: pip install --upgrade pip && pip install --only-binary=all -r requirements.txt
+```
 
 ### Getting Help
 - Check Render documentation

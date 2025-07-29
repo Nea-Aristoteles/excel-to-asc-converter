@@ -3,8 +3,8 @@ services:
     name: excel-to-asc-converter
     env: python
     plan: free
-    buildCommand: pip install --upgrade pip && pip install --only-binary=all --no-compile -r requirements.txt
-    startCommand: gunicorn --bind 0.0.0.0:$PORT --timeout 300 --workers 1 --max-requests 50 --preload app:app
+    buildCommand: pip install --upgrade pip && pip install --only-binary=all -r requirements-light.txt
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --timeout 120 --workers 1 --max-requests 100 app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.12
