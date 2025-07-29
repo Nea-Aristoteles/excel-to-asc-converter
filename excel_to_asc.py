@@ -31,7 +31,8 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     indirizzo_field = f"{indirizzo:<35}" if indirizzo else " " * 35
     
     # Città con CAP - formato esatto del template
-    citta_cap_field = f"{cap:05d} {citta_res:<30}"
+    cap_int = int(cap) if pd.notna(cap) and cap != 0 else 0
+    citta_cap_field = f"{cap_int:05d} {citta_res:<30}"
     
     # Formatta importo (moltiplicato per 100)
     importo_int = int(round(importo * 100))
@@ -70,7 +71,7 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
 def main():
     # Leggi il file Excel
     try:
-        df = pd.read_excel('Test_Dario.xlsx')
+        df = pd.read_excel('Test_Dario copia.xlsx')
         print(f"Letto file Excel con {len(df)} righe")
     except Exception as e:
         print(f"Errore nella lettura del file Excel: {e}")
