@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Excel to ASC Converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        h1 { color: #333; text-align: center; }
+        .upload-form { text-align: center; margin: 30px 0; }
+        input[type="file"] { margin: 20px 0; padding: 10px; }
+        button { background: #007bff; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .flash { padding: 10px; margin: 20px 0; border-radius: 5px; background: #f8d7da; color: #721c24; }
+        .info { background: #e9ecef; padding: 20px; border-radius: 5px; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Excel to ASC Converter</h1>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+            <div>
+                <input type="file" name="file" accept=".xlsx,.xls" required>
+            </div>
+            <button type="submit">Convert to ASC</button>
+        </form>
+        
+        <div class="info">
+            <h3>Instructions:</h3>
+            <ul>
+                <li>Upload Excel file (.xlsx or .xls)</li>
+                <li>Records with negative amounts → Avere.ASC</li>
+                <li>Records with amounts ≥ 0 → Dare.ASC</li>
+                <li>Download ZIP file with both ASC files</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html> 

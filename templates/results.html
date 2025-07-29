@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conversion Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .container { background: #f9f9f9; padding: 30px; border-radius: 10px; }
+        h1 { color: #333; text-align: center; }
+        .stats { background: white; padding: 20px; border-radius: 5px; margin: 20px 0; }
+        .download-form { text-align: center; margin: 30px 0; }
+        button { background: #28a745; color: white; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 10px; }
+        button:hover { background: #218838; }
+        .back-btn { background: #6c757d; }
+        .back-btn:hover { background: #545b62; }
+        textarea { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Conversion Complete</h1>
+        
+        <div class="stats">
+            <h3>Processing Summary:</h3>
+            <p><strong>Total Records:</strong> {{ results.total_records }}</p>
+            <p><strong>Dare.ASC Records:</strong> {{ results.dare_count }}</p>
+            <p><strong>Avere.ASC Records:</strong> {{ results.avere_count }}</p>
+        </div>
+        
+        <form action="/download" method="post" class="download-form">
+            <textarea name="avere_content">{{ results.avere_content }}</textarea>
+            <textarea name="dare_content">{{ results.dare_content }}</textarea>
+            <button type="submit">📥 Download ASC Files (ZIP)</button>
+        </form>
+        
+        <div class="download-form">
+            <a href="/"><button type="button" class="back-btn">🔄 Convert Another File</button></a>
+        </div>
+    </div>
+</body>
+</html> 
