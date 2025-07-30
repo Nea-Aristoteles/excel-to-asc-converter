@@ -12,11 +12,11 @@ def format_date(date, format='%d/%m/%y'):
 def format_avere_line(row_num, data_cont, importo, codice1, codice2, data_rif, codice3, codice4):
     """Formatta una riga per il file Avere.ASC"""
     # User requirements:
-    # Field 1: Date, Field 2: C, Field 3: Importo, Field 4: "I", Field 5: Same date as field 1, Field 6: Cod cli, Field 7: "I"
+    # Field 1: Date, Field 2: C, Field 3: Importo, Field 4: "1" (6 digits), Field 5: Same date as field 1, Field 6: Cod cli, Field 7: "1" (9 digits)
     importo_int = abs(int(round(importo * 100)))  # Moltiplica per 100, arrotonda e prendi valore assoluto
     codice1_int = int(codice1) if pd.notna(codice1) else 0
     
-    line = f"{format_date(data_cont)},C,{importo_int:>9},I,{format_date(data_cont)},{codice1_int:>5},I"
+    line = f"{format_date(data_cont)},C,{importo_int:>9},{1:>6},{format_date(data_cont)},{codice1_int:>5},{1:>9}"
     
     return line
 
