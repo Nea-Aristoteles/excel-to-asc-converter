@@ -36,9 +36,10 @@ def process_excel_to_asc(filepath):
     
     # Generate Avere.ASC
     avere_lines = []
+    row_num = 1
     for idx, row in avere_records.iterrows():
         line = format_avere_line(
-            row_num=idx+1,
+            row_num=row_num,
             data_cont=row['Data_contabilizzazione'],
             importo=row['Importo'],
             codice1=row['N_Cli'],
@@ -48,13 +49,15 @@ def process_excel_to_asc(filepath):
             codice4=1
         )
         avere_lines.append(line)
+        row_num += 1
     results['avere_content'] = '\n'.join(avere_lines)
     
     # Generate Dare.ASC
     dare_lines = []
+    row_num = 1
     for idx, row in dare_records.iterrows():
         line = format_dare_line(
-            row_num=idx+1,
+            row_num=row_num,
             data_cont=row['Data_contabilizzazione'],
             n_cli=row['N_Cli'],
             nome=row['Nome'] if pd.notna(row['Nome']) else '',
@@ -71,6 +74,7 @@ def process_excel_to_asc(filepath):
             cod_fisc=row['Cod_fisc'] if pd.notna(row['Cod_fisc']) else ''
         )
         dare_lines.append(line)
+        row_num += 1
     results['dare_content'] = '\n'.join(dare_lines)
     
     return results
