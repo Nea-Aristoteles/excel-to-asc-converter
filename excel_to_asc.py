@@ -30,10 +30,10 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     nome_field = f"{nome_completo:<35}"
     indirizzo_field = f"{indirizzo:<35}" if indirizzo else " " * 35
     
-    # Città con CAP - formato esatto del template con provincia
+    # Città con CAP - formato esatto del template con provincia (35 chars total)
     cap_int = int(cap) if pd.notna(cap) and cap != 0 else 0
     prov_res = provincia if pd.notna(provincia) and provincia else "NA"
-    citta_cap_field = f"{cap_int:05d} {citta_res:<25}{prov_res:>2}"
+    citta_cap_field = f"{cap_int:05d} {citta_res:<27}{prov_res:>2}"
     
     # Formatta importo (moltiplicato per 100)
     importo_int = int(round(importo * 100))
