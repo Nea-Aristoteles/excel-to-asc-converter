@@ -59,11 +59,11 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     else:
         data_nasc_str = "          "
     
-    # Codice fiscale - check if there's a leading space in the data
-    if cod_fisc and cod_fisc.startswith(' '):
-        cod_fisc_field = cod_fisc  # Keep the space
+    # Codice fiscale - clean up trailing spaces but preserve leading spaces if they exist
+    if cod_fisc:
+        cod_fisc_field = cod_fisc.rstrip()  # Remove trailing spaces only
     else:
-        cod_fisc_field = cod_fisc if cod_fisc else ""
+        cod_fisc_field = ""
     
     n_cli_int = int(n_cli) if pd.notna(n_cli) else 0
     line = f"{format_date(data_cont)},{n_cli_int:>5},{nome_field},{indirizzo_field},{citta_cap_field},{importo_field},{citta_nascita_field},{prov_nascita},{nazione_field},{sigla_naz_field},{data_nasc_str},{cod_fisc_field}"
