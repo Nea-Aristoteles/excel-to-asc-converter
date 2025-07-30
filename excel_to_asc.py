@@ -59,9 +59,9 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     else:
         data_nasc_str = "          "
     
-    # Codice fiscale - clean up trailing spaces but preserve leading spaces if they exist
+    # Codice fiscale - clean up all leading and trailing spaces
     if cod_fisc:
-        cod_fisc_field = cod_fisc.rstrip()  # Remove trailing spaces only
+        cod_fisc_field = cod_fisc.strip()  # Remove both leading and trailing spaces
     else:
         cod_fisc_field = ""
     
