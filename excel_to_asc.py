@@ -30,9 +30,10 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     nome_field = f"{nome_completo:<35}"
     indirizzo_field = f"{indirizzo:<35}" if indirizzo else " " * 35
     
-    # Città con CAP - formato esatto del template
+    # Città con CAP - formato esatto del template con provincia
     cap_int = int(cap) if pd.notna(cap) and cap != 0 else 0
-    citta_cap_field = f"{cap_int:05d} {citta_res:<30}"
+    prov_res = provincia if pd.notna(provincia) else ""
+    citta_cap_field = f"{cap_int:05d} {citta_res:<25}{prov_res:>2}"
     
     # Formatta importo (moltiplicato per 100)
     importo_int = int(round(importo * 100))
@@ -42,8 +43,7 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     if citta_nascita and ',' in citta_nascita:
         citta_n, prov_n = citta_nascita.split(',', 1)
         citta_nascita_field = f"{citta_n:<26}"
-        # Province of birth should be empty in template, not the residence province
-        prov_nascita = "  "
+        prov_nascita = f"{prov_n.strip():>2}"
     else:
         citta_nascita_field = f"{citta_nascita:<26}" if citta_nascita else " " * 26
         prov_nascita = "  "
@@ -52,9 +52,9 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     nazione_field = f"{nazione:<23}" if nazione else " " * 23
     sigla_naz_field = f"{sigla_nazione:<5}" if sigla_nazione else "     "
     
-    # Data nascita nel formato YYYY-MM-DD
+    # Data nascita nel formato DD/MM/YYYY
     if pd.notna(data_nascita):
-        data_nasc_str = data_nascita.strftime('%Y-%m-%d')
+        data_nasc_str = data_nascita.strftime('%d/%m/%Y')
     else:
         data_nasc_str = "          "
     
@@ -64,7 +64,8 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     else:
         cod_fisc_field = cod_fisc if cod_fisc else ""
     
-    line = f"{format_date(data_cont)},{n_cli:>5},{nome_field},{indirizzo_field},{citta_cap_field},{importo_field},{citta_nascita_field},{prov_nascita},{nazione_field},{sigla_naz_field},{data_nasc_str},{cod_fisc_field}"
+    n_cli_int = int(n_cli) if pd.notna(n_cli) else 0
+    line = f"{format_date(data_cont)},{n_cli_int:>5},{nome_field},{indirizzo_field},{citta_cap_field},{importo_field},{citta_nascita_field},{prov_nascita},{nazione_field},{sigla_naz_field},{data_nasc_str},{cod_fisc_field}"
     
     return line
 
