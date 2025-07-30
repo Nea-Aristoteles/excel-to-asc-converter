@@ -32,7 +32,7 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     
     # Città con CAP - formato esatto del template con provincia
     cap_int = int(cap) if pd.notna(cap) and cap != 0 else 0
-    prov_res = provincia if pd.notna(provincia) else ""
+    prov_res = provincia if pd.notna(provincia) and provincia else "NA"
     citta_cap_field = f"{cap_int:05d} {citta_res:<25}{prov_res:>2}"
     
     # Formatta importo (moltiplicato per 100)
