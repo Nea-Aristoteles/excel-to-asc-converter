@@ -7,7 +7,26 @@ def format_date(date, format='%d/%m/%y'):
     """Formatta una data nel formato richiesto"""
     if pd.isna(date):
         return ''
-    return date.strftime(format)
+    
+    # Handle different date formats
+    if isinstance(date, (int, float)):
+        # Convert Excel serial number to datetime
+        try:
+            date = pd.to_datetime(date, origin='1899-12-30', unit='D')
+        except:
+            return ''
+    elif isinstance(date, str):
+        # Convert string to datetime
+        try:
+            date = pd.to_datetime(date)
+        except:
+            return ''
+    
+    # Now format the datetime object
+    try:
+        return date.strftime(format)
+    except:
+        return ''
 
 def format_avere_line(row_num, data_cont, importo, codice1, codice2, data_rif, codice3, codice4):
     """Formatta una riga per il file Avere.ASC"""
