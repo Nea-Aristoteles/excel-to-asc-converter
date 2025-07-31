@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-in-production')
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max file size
+app.config['MAX_FORM_MEMORY_SIZE'] = 100 * 1024 * 1024  # 100MB max form data size
 
 ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
 
@@ -114,28 +115,50 @@ def upload_file():
 
 @app.route('/download', methods=['POST'])
 def download_results():
+    temp_zip_path = None
     try:
         avere_content = request.form.get('avere_content', '')
         dare_content = request.form.get('dare_content', '')
         
+        # Create temporary zip file
         temp_zip = tempfile.NamedTemporaryFile(delete=False, suffix='.zip')
-        
-        with zipfile.ZipFile(temp_zip.name, 'w') as zip_file:
-            if avere_content:
-                zip_file.writestr('Avere.ASC', avere_content)
-            if dare_content:
-                zip_file.writestr('Dare.ASC', dare_content)
-        
+        temp_zip_path = temp_zip.name
         temp_zip.close()
         
-        return send_file(
-            temp_zip.name,
+        # Use compression to reduce file size
+        with zipfile.ZipFile(temp_zip_path, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+            if avere_content:
+                zip_file.writestr('Avere.ASC', avere_content.encode('utf-8'))
+            if dare_content:
+                zip_file.writestr('Dare.ASC', dare_content.encode('utf-8'))
+        
+        # Send file and clean up automatically after download
+        def remove_file(response):
+            try:
+                os.remove(temp_zip_path)
+            except:
+                pass
+            return response
+        
+        response = send_file(
+            temp_zip_path,
             as_attachment=True,
             download_name='ASC_Files.zip',
             mimetype='application/zip'
         )
         
+        # Schedule cleanup after response is sent
+        response.call_on_close(lambda: os.remove(temp_zip_path) if os.path.exists(temp_zip_path) else None)
+        
+        return response
+        
     except Exception as e:
+        # Clean up temp file on error
+        if temp_zip_path and os.path.exists(temp_zip_path):
+            try:
+                os.remove(temp_zip_path)
+            except:
+                pass
         flash(f'Error creating download: {str(e)}')
         return redirect(url_for('index'))
 
