@@ -46,14 +46,18 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     # Combina nome e cognome
     nome_completo = f"{cognome} {nome}".strip()
     
-    # Formatta i campi con le lunghezze corrette
-    nome_field = f"{nome_completo:<35}"
-    indirizzo_field = f"{indirizzo:<35}" if indirizzo else " " * 35
+    # Formatta i campi con le lunghezze corrette - truncate if too long
+    nome_completo_truncated = nome_completo[:35] if len(nome_completo) > 35 else nome_completo
+    nome_field = f"{nome_completo_truncated:<35}"
+    
+    indirizzo_truncated = indirizzo[:35] if indirizzo and len(indirizzo) > 35 else (indirizzo or "")
+    indirizzo_field = f"{indirizzo_truncated:<35}"
     
     # Città con CAP - formato esatto del template con provincia (35 chars total)
     cap_int = int(cap) if pd.notna(cap) and cap != 0 else 0
     prov_res = provincia if pd.notna(provincia) and provincia else "NA"
-    citta_cap_field = f"{cap_int:05d} {citta_res:<27}{prov_res:>2}"
+    citta_res_truncated = citta_res[:27] if citta_res and len(citta_res) > 27 else (citta_res or "")
+    citta_cap_field = f"{cap_int:05d} {citta_res_truncated:<27}{prov_res:>2}"
     
     # Formatta importo (moltiplicato per 100)
     importo_int = int(round(importo * 100))
@@ -62,15 +66,19 @@ def format_dare_line(row_num, data_cont, n_cli, nome, cognome, indirizzo, cap, c
     # Parse città nascita e provincia se presenti nel formato "CITTÀ,PROV"
     if citta_nascita and ',' in citta_nascita:
         citta_n, prov_n = citta_nascita.split(',', 1)
-        citta_nascita_field = f"{citta_n:<26}"
-        prov_nascita = f"{prov_n.strip():>2}"
+        citta_n_truncated = citta_n[:26] if len(citta_n) > 26 else citta_n
+        citta_nascita_field = f"{citta_n_truncated:<26}"
+        prov_nascita = f"{prov_n.strip()[:2]:>2}" if prov_n.strip() else "  "
     else:
-        citta_nascita_field = f"{citta_nascita:<26}" if citta_nascita else " " * 26
+        citta_nascita_truncated = citta_nascita[:26] if citta_nascita and len(citta_nascita) > 26 else (citta_nascita or "")
+        citta_nascita_field = f"{citta_nascita_truncated:<26}"
         prov_nascita = "  "
     
-    # Nazione e sigla - IMPORTANT: sigla must be exactly 5 chars
-    nazione_field = f"{nazione:<23}" if nazione else " " * 23
-    sigla_naz_field = f"{sigla_nazione:<5}" if sigla_nazione else "     "
+    # Nazione e sigla - truncate if too long
+    nazione_truncated = nazione[:23] if nazione and len(nazione) > 23 else (nazione or "")
+    nazione_field = f"{nazione_truncated:<23}"
+    sigla_naz_truncated = sigla_nazione[:5] if sigla_nazione and len(sigla_nazione) > 5 else (sigla_nazione or "")
+    sigla_naz_field = f"{sigla_naz_truncated:<5}"
     
     # Data nascita nel formato DD/MM/YYYY
     if pd.notna(data_nascita):
